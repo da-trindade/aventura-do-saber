@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aventura do Saber</title>
+  <meta name="description" content="Jogo educacional para crianças da Educação Infantil (Pré-Escola II): contagem, noções espaciais, animais e seus habitats e consciência silábica.">
+  <meta name="theme-color" content="#FFF8E7">
+  <link rel="icon" href="img/estrela.webp" type="image/webp">
+  <link rel="preload" href="fonts/fredoka-600.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="fonts/nunito-400.woff" as="font" type="font/woff" crossorigin>
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+  <!-- Ícones reaproveitados (SVG inline, sem dependência externa) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-som" viewBox="0 0 24 24"><path d="M3.5 9.2h3.6L12 5v14l-4.9-4.2H3.5z" fill="currentColor"/><path d="M15.4 8.8a4.4 4.4 0 0 1 0 6.4M18.2 6a8.4 8.4 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></symbol>
+    <symbol id="i-seta" viewBox="0 0 24 24"><path d="M4.5 12h14M13 5.8 19.2 12 13 18.2" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-denovo" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3M19.5 4.5v4.8h-4.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-casa" viewBox="0 0 24 24"><path d="M3.8 11.4 12 4.6l8.2 6.8M6.4 9.8V19h4.1v-5.2h3V19h4.1V9.8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </svg>
+
+  <div id="app">
+    <header class="topo">
+      <button id="btnSair" class="btn-casa" type="button" aria-label="Sair do jogo" hidden><svg><use href="#i-casa"/></svg></button>
+      <img class="logo" src="img/logo-aventura-do-saber.webp" alt="Aventura do Saber" width="900" height="312">
+    </header>
+
+    <main id="palco">
+
+      <!-- 1. Identificação (feita pelo adulto) -->
+      <section id="tela-nome" class="tela com-lumi" aria-labelledby="tituloNome">
+        <img class="lumi" src="img/lumi-saudando.webp" alt="" width="551" height="600">
+        <form id="formNome" class="cartao" autocomplete="off">
+          <h1 id="tituloNome">Quem vai jogar?</h1>
+          <div class="campo">
+            <label for="nomeCrianca">Nome da criança</label>
+            <input id="nomeCrianca" name="nome" type="text" maxlength="40" placeholder="Ex.: Ana B." data-foco spellcheck="false">
+          </div>
+          <p class="nota">Sugestão: primeiro nome e inicial do sobrenome. O nome fica só no registro do professor, guardado neste computador.</p>
+          <div class="acoes">
+            <button class="btn-principal" type="submit">Continuar <svg aria-hidden="true"><use href="#i-seta"/></svg></button>
+            <button class="btn-link" type="button" id="btnProfessor">Área do professor</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- 2. Abertura -->
+      <section id="tela-abertura" class="tela com-lumi" aria-labelledby="tituloAbertura" hidden>
+        <img class="lumi" src="img/lumi-saudando.webp" alt="" width="551" height="600">
+        <div class="cartao">
+          <h1 id="tituloAbertura">Vamos brincar e aprender?</h1>
+          <p class="texto">Observe as imagens, escute a pergunta e toque na resposta certa.</p>
+          <p class="fala">Olá! Eu sou a Lumi. Vou brincar com você! <img class="ico-estrela" src="img/estrela.webp" alt=""></p>
+          <div class="acoes">
+            <button class="btn-audio" type="button" data-repetir aria-label="Ouvir de novo"><svg aria-hidden="true"><use href="#i-som"/></svg></button>
+            <button class="btn-principal" type="button" id="btnComecar" data-foco>Começar <svg aria-hidden="true"><use href="#i-seta"/></svg></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Introdução do nível -->
+      <section id="tela-nivel" class="tela com-lumi" aria-labelledby="tituloNivel" hidden>
+        <img class="lumi" src="img/lumi-incentivando.webp" alt="" width="539" height="600">
+        <div class="cartao">
+          <h1 id="tituloNivel">Nível Fácil</h1>
+          <div class="estrelas estrelas-nivel" id="nivelEstrelas" aria-hidden="true"></div>
+          <p class="texto-grande" id="nivelLinha1">Vamos começar!</p>
+          <p class="texto" id="nivelLinha2">Temos 7 desafios divertidos. Você consegue!</p>
+          <p class="fala" id="nivelFala">Observe com atenção e escute cada pergunta.</p>
+          <div class="acoes">
+            <button class="btn-audio" type="button" data-repetir aria-label="Ouvir de novo"><svg aria-hidden="true"><use href="#i-som"/></svg></button>
+            <button class="btn-principal" type="button" id="btnIniciar" data-foco>Iniciar <svg aria-hidden="true"><use href="#i-seta"/></svg></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Pergunta -->
+      <section id="tela-pergunta" class="tela" aria-labelledby="pergNumero" hidden>
+        <div class="cartao cartao-pergunta">
+          <div class="cabecalho">
+            <h2 id="pergNumero">Pergunta 1 de 7</h2>
+            <div class="progresso" role="progressbar" aria-label="Progresso do nível" aria-valuemin="0" aria-valuemax="7" aria-valuenow="1"><div id="pergBarra"></div></div>
+          </div>
+          <div class="comando">
+            <button class="btn-audio" type="button" id="btnRepetir" aria-label="Ouvir a pergunta de novo" data-foco><svg aria-hidden="true"><use href="#i-som"/></svg></button>
+            <p id="pergComando">Quantas maçãs aparecem na tela?</p>
+          </div>
+          <div id="pergCena" class="cena"></div>
+          <div id="pergAlternativas" class="alternativas" role="group" aria-label="Respostas"></div>
+          <p class="dica" id="pergDica">Toque na resposta que você escolheu.</p>
+        </div>
+      </section>
+
+      <!-- 5. Acerto -->
+      <section id="tela-acerto" class="tela com-lumi" aria-labelledby="acertoTitulo" hidden>
+        <img class="lumi" src="img/lumi-comemorando.webp" alt="" width="536" height="600">
+        <div class="cartao centro">
+          <h1 id="acertoTitulo">Isso aí!</h1>
+          <p class="acertou"><img id="acertoEstrela" class="ico-estrela" src="img/estrela.webp" alt=""> Você acertou!</p>
+          <div id="acertoImagem" class="acerto-imagem"></div>
+          <p class="fala" id="acertoReforco" aria-live="polite"></p>
+          <div class="acoes centro">
+            <button class="btn-principal" type="button" id="btnProxima" data-foco><span>Próxima pergunta</span> <svg aria-hidden="true"><use href="#i-seta"/></svg></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Resultado do nível -->
+      <section id="tela-resultado" class="tela com-lumi" aria-labelledby="resTitulo" hidden>
+        <img class="lumi" src="img/lumi-comemorando.webp" alt="" width="536" height="600">
+        <div class="cartao centro">
+          <h1 id="resTitulo">Parabéns!</h1>
+          <p class="texto-grande" id="resTexto">Você concluiu o Nível Fácil!</p>
+          <div class="estrelas" id="resEstrelas"></div>
+          <p class="fala" id="resFala"></p>
+          <div class="acoes coluna">
+            <button class="btn-principal" type="button" id="btnResPrincipal" data-foco><span>Próximo nível</span> <svg aria-hidden="true"><use href="#i-seta"/></svg></button>
+            <button class="btn-secundario" type="button" id="btnResInicio">Voltar ao início</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. Área do professor -->
+      <section id="tela-professor" class="tela" aria-labelledby="tituloProf" hidden>
+        <div class="cartao cartao-professor">
+          <h1 id="tituloProf">Área do professor</h1>
+          <p>Cada toque da criança numa resposta vira uma linha do registro, com nome, data, hora, pergunta, área, assunto, habilidade, tentativa e resultado.</p>
+          <p class="nota">Os registros ficam guardados apenas neste navegador, neste computador. Nada é enviado pela internet. Em janela anônima ou no modo visitante, eles são apagados quando a sessão termina.</p>
+          <p id="profAviso" class="aviso" hidden>Este navegador não está permitindo guardar dados. Os registros ficam só até a página ser fechada: baixe o arquivo antes de sair.</p>
+          <p class="texto-grande" id="profResumo">Nenhum registro ainda.</p>
+          <div class="acoes">
+            <button class="btn-principal" type="button" id="btnBaixar" data-foco>Baixar registros (.txt)</button>
+            <button class="btn-secundario" type="button" id="btnLimpar">Apagar registros</button>
+          </div>
+          <pre id="profPrevia" aria-label="Últimos registros"></pre>
+          <button class="btn-link" type="button" id="btnProfVoltar">Voltar</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Aviso de nova tentativa -->
+  <div id="modalTentar" class="modal" hidden>
+    <div class="modal-caixa" role="dialog" aria-modal="true" aria-labelledby="tentarTitulo" aria-describedby="tentarTexto">
+      <img class="modal-lumi" src="img/lumi-incentivando.webp" alt="" width="539" height="600">
+      <h2 id="tentarTitulo">Vamos tentar de novo?</h2>
+      <p id="tentarTexto" class="texto">Você consegue!</p>
+      <button class="btn-principal" type="button" id="btnTentar">Tentar de novo</button>
+    </div>
+  </div>
+
+  <!-- Confirmação de saída (para o adulto) -->
+  <div id="modalSair" class="modal" hidden>
+    <div class="modal-caixa" role="dialog" aria-modal="true" aria-labelledby="sairTitulo">
+      <h2 id="sairTitulo">Sair do jogo?</h2>
+      <p class="texto">O que já foi respondido continua no registro.</p>
+      <div class="acoes coluna">
+        <button class="btn-principal" type="button" id="btnContinuar">Continuar jogando</button>
+        <button class="btn-secundario" type="button" id="btnConfirmaSair">Sair</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="confete" aria-hidden="true"></div>
+
+  <script src="js/perguntas.js" defer></script>
+  <script src="js/audio.js" defer></script>
+  <script src="js/registro.js" defer></script>
+  <script src="js/cenas.js" defer></script>
+  <script src="js/jogo.js" defer></script>
+</body>
+</html>
